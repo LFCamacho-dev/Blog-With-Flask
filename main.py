@@ -12,9 +12,19 @@ def home():
     return render_template("index.html", year=today_date.year)
 
 
+@app.route('/about/')
+def about():
+    return render_template("about.html", year=today_date.year)
+
+
 @app.route('/blog/')
 def blog():
     return render_template("blog.html", year=today_date.year, posts=all_posts)
+
+
+@app.route('/contact/')
+def contact():
+    return render_template("contact.html", year=today_date.year)
 
 
 @app.route('/blog/post/<int:post_id>')

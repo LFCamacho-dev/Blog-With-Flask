@@ -1,28 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Blog</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
-</head>
-<body>
-    <div class="wrapper">
-        <div class="top">
-            <div class="title"><h1>My Blog</h1></div>
-        </div>
-        <div class="content">
-                       <div class="card">
-                           <h2>{{ post_info['title'] }}</h2>
-                           <h4>{{ post_info['subtitle'] }}</h4>
-                           <p class="text">{{ post_info['body'] }}</p>
-                           <a href="{{url_for('blog')}}">&laquo; Go Back</a>
-                       </div>
 
-        </div>
-    </div>
-</body>
-<footer>
-    <p>&copy Copyright {{ year }} | LFCamacho @ Creatos. Created using Flask</p>
-</footer>
-</html>
+{% include 'header.html' %}
+
+<!-- Page Header-->
+        <header class="masthead" style="background-image: url('{{ url_for('static', filename='assets/img/post-bg.jpg')}}">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>{{ post_info.title }}</h1>
+                            <h2 class="subheading">{{ post_info.subtitle }}</h2>
+                            <span class="meta">
+                                Posted by
+                                <a href="#!">Luis F</a>
+                                on August 24, 2021
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+
+                        <p class="text">{{ post_info['body'] }}</p>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </article>
+
+
+{% include 'footer.html' %}
