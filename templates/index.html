@@ -3,10 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>My Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
-    <h1>Hi random: {{num}}</h1>
+    <a href="{{url_for('blog')}}">Go To Blogs</a>
+
+    <div class="wrapper">
+        <div class="top">
+            <div class="title"><h1>My Blog</h1></div>
+        </div>
+        <div class="content">
+            <div class="card">
+                {% for blog_post in posts: %}
+                    <h1>{{blog_post["title"]}}</h1>
+                    <h3>{{blog_post["subtitle"]}}</h3>
+                    <p>{{blog_post["body"]}}</p>
+                {% endfor %}
+                <h2>Just a blog post</h2>
+                <p class="text">Lorem ipsum dolor sit </p>
+                <a href="#">Read</a>
+            </div>
+        </div>
+    </div>
 </body>
-<footer><p>&copy Copyright {{ year }} | LFCamacho @ Creatos. Created using Flask & Jinja</p>
+<footer>
+    <p>&copy Copyright {{ year }} | LFCamacho @ Creatos. Created using Flask</p>
 </footer>
 </html>
