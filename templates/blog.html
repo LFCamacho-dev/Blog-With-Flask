@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="top">
+        <div class="title"><h1>Blog</h1></div>
+    </div>
+    {% for blog_post in posts: %}
+        <div class="content">
+            <div class="card">
+                    <h2>{{blog_post["title"]}}</h2>
+                    <h4>{{blog_post["subtitle"]}}</h4>
+                <a href="{{url_for('post_page', post_id=blog_post['id'])}}">Read &raquo;</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+<footer>
+    <p>&copy Copyright {{ year }} | LFCamacho @ Creatos. Created using Flask</p>
+</footer>
+</body>
+</html>
