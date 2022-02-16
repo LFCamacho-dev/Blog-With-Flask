@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+
+{% block h1title %}Home{% endblock %}
+
+{% block subtitle %}Welcome to my page.{% endblock %}
+
+    <!-- Main Content-->
+{% block maincontent %}
+
+    <main class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+
+                    <form action="{{url_for('receive_login')}}" method="post">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="username" placeholder="Name" size="15">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password"  name="password" placeholder="Password" size="15">
+                        <button class="btn btn-primary text-uppercase" type="submit">Send</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+{% endblock %}
+
