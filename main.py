@@ -41,8 +41,7 @@ def login():
         if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
             return render_template("pages/secret/success.html")
             # return "Success match!"
-        else:
-            return render_template("pages/secret/denied.html")
+        return render_template("pages/secret/denied.html")
     return render_template('pages/secret/login_secret.html', form=login_form)
 
 
