@@ -67,7 +67,6 @@ def receive_data():
     e_mail = request.form['email']
     phone = request.form['phone']
     message = request.form['message']
-
     if request.method == 'POST':
         new_email = sm.Email()
         new_email.send_email(name, e_mail, phone, message)
