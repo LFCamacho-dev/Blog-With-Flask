@@ -21,7 +21,7 @@
 <!--                                <a href="{{url_for('post_page', post_id=blog_post['id'])}}">Read &raquo;</a>-->
                             </a>
                             <p class="post-meta">
-                            Posted by <a href="#!">Luis F</a> on September 24, 2021
+                            Posted by <a href="#!">{{blog_post.author}}</a> on {{blog_post.date}} <a href="{{url_for('delete_post', post_id=blog_post.id)}}">✘</a>
                             </p>
                         </div>
                     <!-- Divider-->
@@ -31,9 +31,11 @@
                     <!-- Divider-->
                     <hr class="my-4" />
                     <!-- Pager-->
-                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+<!--                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>-->
+                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary float-right text-uppercase" href="{{url_for('new_post')}}">Create New Post</a></div>
                 </div>
             </div>
+
         </div>
     </main>
 

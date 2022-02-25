@@ -1,9 +1,9 @@
 
 {% extends "post-base.html" %}
 
-{% block h1title %}{{ post_info.title }}{% endblock %}
+{% block h1title %}{{ post.title }}{% endblock %}
 
-{% block subtitle %}{{ post_info.subtitle }}{% endblock %}
+{% block subtitle %}{{ post.subtitle }}{% endblock %}
 
     <!-- Post Content-->
 {% block maincontent %}
@@ -13,8 +13,11 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
 
-                        <p class="text">{{ post_info['body'] }}</p>
-
+                        <p class="text">{{ post.body|safe }}</p>
+                        <hr>
+                        <div class="clearfix">
+                        <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
+                        </div>
                     </div>
                 </div>
             </div>
