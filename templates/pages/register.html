@@ -1,0 +1,25 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block h1title %}Register{% endblock %}
+
+{% block subtitle %}Start Contributing to the Blog!{% endblock %}
+
+    <!-- Main Content-->
+{% block maincontent %}
+
+    <main class="mb-4">
+        <div class="container px-4 px-lg-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">
+
+                {{ wtf.quick_form(form, novalidate=True, button_map={'submit': 'primary'}) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+
+{% endblock %}
