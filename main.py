@@ -38,22 +38,35 @@ def load_user(user_id):
 
 
 class User(UserMixin, db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
+    name = db.Column(db.String(100))
+
+    # This will act like a List of BlogPost objects attached to each User.
+    # The "author" refers to the author property in the BlogPost class.
+    posts = relationship("BlogPost", back_populates="author")
 
 
 class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
+
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    # Create reference to the User object, the "posts" refers to the post's property in the User class.
+    author = relationship("User", back_populates="posts")
+
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    author = db.Column(db.String(250), nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
 
-# db.create_all()  # This line only required once, when creating DB.
+
+
+db.create_all()  # This line only required once, when creating DB.
 
 
 # all_posts = requests.get("https://api.npoint.io/b73c5f9f1858f6080703").json()
@@ -110,14 +123,14 @@ def new_post():
     form = UserForms.CreatePostForm()
     page_title = "Create New Post"
     if request.method == 'POST':
-        new_blog_post = BlogPost(
-            title=request.form.get('title'),
-            subtitle=request.form.get('subtitle'),
-            date=f"{dt.strftime(today_date,'%B')} {today_date.day}, {today_date.year}",
-            body=request.form.get('body'),
-            author=request.form.get('author'),
-            img_url=request.form.get('img_url'),
-        )
+        new_blog_post = BlogPost()
+        new_blog_post.title = request.form.get('title')
+        new_blog_post.subtitle = request.form.get('subtitle')
+        new_blog_post.date = f"{dt.strftime(today_date,'%B')} {today_date.day}, {today_date.year}"
+        new_blog_post.body = request.form.get('body')
+        new_blog_post.author = current_user
+        new_blog_post.img_url = request.form.get('img_url')
+
         db.session.add(new_blog_post)
         db.session.commit()
 
@@ -148,7 +161,7 @@ def edit_post(post_id):
     if edit_form.validate_on_submit():
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
-        post.author = edit_form.author.data
+        # post.author = edit_form.author.data
         post.img_url = edit_form.img_url.data
         post.body = edit_form.body.data
         db.session.commit()
@@ -157,7 +170,7 @@ def edit_post(post_id):
         edit_form.title.data = post.title
         edit_form.subtitle.data = post.subtitle
         edit_form.img_url.data = post.img_url
-        edit_form.author.data = post.author
+        # edit_form.author.data = post.author
         edit_form.body.data = post.body
 
     return render_template('pages/make-post.html', page_title=page_title, post=post_id, form=edit_form, logged_in=current_user.is_authenticated)

@@ -20,7 +20,7 @@
                                 <h3 class="post-subtitle">{{blog_post.subtitle}}</h3>
                             </a>
                             <p class="post-meta">
-                            Posted by <a href="#!">{{blog_post.author}}</a> on {{blog_post.date}}
+                            Posted by <a href="#!">{{blog_post.author.name}}</a> on {{blog_post.date}}
                                 {% if logged_in and current_user.id == 1 %}
                                 <a href="{{url_for('delete_post', post_id=blog_post.id)}}">✘</a>
                                 {% endif %}
