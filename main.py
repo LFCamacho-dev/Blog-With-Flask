@@ -24,6 +24,14 @@ today_date = dt.today()
 app.secret_key = r"b'Vj<\xf7mP\x854\xad%,E'"
 ckeditor = CKEditor(app)
 Bootstrap(app)
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=False,
+                    base_url=None)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/posts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['CKEDITOR_PKG_TYPE'] = 'standard-all'
@@ -47,6 +55,7 @@ class User(UserMixin, db.Model):
     # This will act like a List of BlogPost objects attached to each User.
     # The "author" refers to the author property in the BlogPost class.
     posts = relationship("BlogPost", back_populates="author")
+    comments = relationship("Comment", back_populates="comment_author")
 
 
 class BlogPost(db.Model):
@@ -57,6 +66,7 @@ class BlogPost(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # Create reference to the User object, the "posts" refers to the post's property in the User class.
     author = relationship("User", back_populates="posts")
+    comments = relationship("Comment", back_populates="parent_post")
 
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
@@ -65,8 +75,17 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    comment_author = relationship("User", back_populates="comments")
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
 
-db.create_all()  # This line only required once, when creating DB.
+
+# db.create_all()  # This line only required once, when creating DB.
 
 
 # all_posts = requests.get("https://api.npoint.io/b73c5f9f1858f6080703").json()
@@ -145,10 +164,29 @@ def blog():
     return render_template("pages/blog.html", year=today_date.year, posts=posts, logged_in=current_user.is_authenticated)
 
 
-@app.route('/blog/post/<int:post_id>', methods=['GET'])
+@app.route('/blog/post/<int:post_id>', methods=['GET', 'POST'])
 def post_page(post_id):
     requested_post = BlogPost.query.filter_by(id=post_id).first()
-    return render_template("pages/post.html", year=today_date.year, post=requested_post, logged_in=current_user.is_authenticated)
+    comment_form = UserForms.CommentForm()
+
+    if comment_form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("You need to login or register to comment.")
+            return redirect(url_for("login"))
+
+        new_comment = Comment(
+            text=request.form.get("body"),
+            comment_author=current_user,
+            parent_post=requested_post,
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return redirect(f'/blog/post/{post_id}')
+
+
+    return render_template("pages/post.html", year=today_date.year, form=comment_form,
+                           post=requested_post, logged_in=current_user.is_authenticated)
 
 
 @app.route("/blog/edit-post/<int:post_id>", methods=["GET", "POST"])

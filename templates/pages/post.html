@@ -1,4 +1,4 @@
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "post-base.html" %}
 
 {% block h1title %}{{ post.title }}{% endblock %}
@@ -20,6 +20,38 @@
                         <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
                             {% endif %}
                         </div>
+
+                    </div>
+            <!--Comments Area -->
+                    <div class="col-lg-8 col-md-10 mx-auto comment">
+                      <ul class="commentList">
+                          {% if current_user.is_authenticated %}
+                          {{ ckeditor.load() }}
+                          {{ ckeditor.config(name='comment_text') }}
+                          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+                          {% else %}
+                              <h5 class="subheading">
+                                You need to
+                                <a href="{{ url_for('login')}}"> login </a>
+                                or
+                                <a href="{{ url_for('register')}}"> register </a>
+                                to comment
+                              </h5>
+                          {% endif %}
+
+                          {% for comment in post.comments:  %}
+                            <li>
+                                <div class="commenterImage">
+                                  <img src="{{current_user.email | gravatar }}"/>
+                                </div>
+                                <div class="commentText">
+                                  {{ comment.text|safe }}
+                                  <span class="date sub-text">Author: {{ comment.comment_author.name }}</span>
+
+                                </div>
+                            </li>
+                          {% endfor %}
+                      </ul>
                     </div>
                 </div>
             </div>
