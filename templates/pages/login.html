@@ -1,0 +1,36 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+
+{% block h1title %}Login{% endblock %}
+
+{% block subtitle %}Welcome Back!{% endblock %}
+
+    <!-- Main Content-->
+{% block maincontent %}
+
+    <main class="mb-4">
+        <div class="container px-4 px-lg-5">
+          <div class="container">
+            <div class="row">
+
+              <div class="col-lg-8 col-md-10 mx-auto content">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                      <p class=error> {{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {% if error %}
+                                      <p class=error><strong>Error:</strong> {{ error }}</p>
+                            {% endif %}
+                        {% endwith %}
+
+                      {{ wtf.quick_form(form, novalidate=True, button_map={'submit': 'primary'}) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+
+{% endblock %}
