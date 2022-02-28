@@ -87,7 +87,7 @@ class Comment(db.Model):
     parent_post = relationship("BlogPost", back_populates="comments")
 
 
-# db.create_all()  # This line only required once, when creating DB.
+db.create_all()  # This line only required once, when creating DB.
 
 
 # all_posts = requests.get("https://api.npoint.io/b73c5f9f1858f6080703").json()
