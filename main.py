@@ -21,7 +21,8 @@ Base = declarative_base()
 app = Flask(__name__)
 today_date = dt.today()
 # print(os.urandom(12)) #  this generates a random key, 12 digits
-app.secret_key = r"b'Vj<\xf7mP\x854\xad%,E'"
+# app.secret_key = r"b'Vj<\xf7mP\x854\xad%,E'"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app,
@@ -32,7 +33,8 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=False,
                     base_url=None)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/posts.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/posts.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['CKEDITOR_PKG_TYPE'] = 'standard-all'
 db = SQLAlchemy(app)
